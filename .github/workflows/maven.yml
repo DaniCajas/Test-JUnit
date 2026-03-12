@@ -19,16 +19,17 @@ jobs:
         distribution: 'temurin'
         cache: maven
         
+    # Esta parte soluciona el error de "no POM in this directory"
+    - name: Submit Dependency Graph
+      uses: advanced-security/maven-dependency-submission-action@v4
+      with:
+        maven-pom-file-path: 'vib_ED_pt2/pom.xml'
+        
     - name: Build with Maven
-      # Apuntamos a la carpeta donde realmente está tu pom.xml
       run: mvn -B package --file vib_ED_pt2/pom.xml
       
     - name: Upload JAR artifact
-      # ACTUALIZADO A V4: Esto soluciona tu error actual
       uses: actions/upload-artifact@v4
       with:
         name: vib_ED_tests-jar
         path: vib_ED_pt2/target/*.jar
-    # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
-    - name: Update dependency graph
-      uses: advanced-security/maven-dependency-submission-action@571e99aab1055c2e71a1e2309b9691de18d6b7d6
